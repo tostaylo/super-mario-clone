@@ -14,8 +14,43 @@ const [tiles, level, characters] = await Promise.all([
 const tileSprites = getTileSprites(tiles);
 const characterSprites = getCharacterSprites(characters);
 
-level.backgrounds.forEach((background) =>
-	drawBackground(background, context, tileSprites)
-);
+const pos = { x: 64, y: 64 };
 
-characterSprites.draw('mario-idle', context, 64, 64);
+class Compositor {
+	constructor() {
+		this.layers = [];
+	}
+
+	draw(context) {
+		this.layers.forEach((layer) => layer(context));
+	}
+	addLayer(layer) {
+		this.layers.push(layer);
+	}
+}
+function createBackgroundLayer(backgrounds, sprites) {
+	const backgroundBuffer = document.createElement('canvas');
+	backgroundBuffer.width = 256;
+	backgroundBuffer.height = 240;
+
+	backgrounds.forEach((background) => {
+		drawBackground(background, backgroundBuffer.getContext('2d'), sprites);
+	});
+
+	return (context) => {
+		context.drawImage(backgroundBuffer, 0, 0);
+	};
+}
+const compositor = new Compositor();
+const backgroundLayer = createBackgroundLayer(level.backgrounds, tileSprites);
+compositor.addLayer(backgroundLayer);
+
+function update() {
+	requestAnimationFrame(update);
+	compositor.draw(context);
+	characterSprites.draw('mario-idle', context, pos.x, pos.y);
+	pos.x += 2;
+	pos.y += 2;
+}
+
+update();
