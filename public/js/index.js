@@ -4,8 +4,11 @@ import { loadImage, loadLevel } from './loaders.js';
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
 
-const image = await loadImage('../images/tiles.png');
-const level = await loadLevel('1-1');
+const [tiles, level, characters] = await Promise.all([
+	loadImage('../images/tiles.png'),
+	loadLevel('1-1'),
+	loadImage('../images/characters.gif'),
+]);
 
 function drawBackground(background, context, sprites) {
 	background.ranges.forEach(([x1, x2, y1, y2]) => {
@@ -16,9 +19,12 @@ function drawBackground(background, context, sprites) {
 		}
 	});
 }
+const tileSprites = new SpriteSheet(tiles, 16, 16);
+tileSprites.defineTile('ground', 0, 0);
+tileSprites.defineTile('sky', 3, 23);
 
-const sprites = new SpriteSheet(image, 16, 16);
-sprites.define('ground', 0, 0);
-sprites.define('sky', 3, 23);
+level.backgrounds.forEach((background) => drawBackground(background, context, tileSprites));
 
-level.backgrounds.forEach((background) => drawBackground(background, context, sprites));
+const characterSprites = new SpriteSheet(characters, 16, 16);
+characterSprites.define('mario-idle', 276, 44, 16, 16);
+characterSprites.draw('mario-idle', context, 64, 64);
