@@ -9,7 +9,9 @@ export default class SpriteSheet {
 	define(name, x, y, width, height) {
 		const buffer = document.createElement('canvas');
 
-		buffer.getContext('2d').drawImage(this.image, x, y, width, height, 0, 0, width, height);
+		buffer
+			.getContext('2d')
+			.drawImage(this.image, x, y, width, height, 0, 0, width, height);
 
 		this.tiles.set(name, buffer);
 	}

@@ -14,6 +14,8 @@ const [tiles, level, characters] = await Promise.all([
 const tileSprites = getTileSprites(tiles);
 const characterSprites = getCharacterSprites(characters);
 
-level.backgrounds.forEach((background) => drawBackground(background, context, tileSprites));
+level.backgrounds.forEach((background) =>
+	drawBackground(background, context, tileSprites)
+);
 
 characterSprites.draw('mario-idle', context, 64, 64);
