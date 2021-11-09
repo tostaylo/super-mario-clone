@@ -14,7 +14,6 @@ export function createBackgroundLayer(backgrounds, sprites) {
 	};
 }
 
-export function createCharacterLayer(characterSprites, position) {
-	return (context) =>
-		characterSprites.draw('mario-idle', context, position.x, position.y);
+export function createCharacterLayer(entity) {
+	return (context) => entity.draw(context);
 }

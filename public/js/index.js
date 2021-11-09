@@ -2,6 +2,7 @@ import { loadImage, loadLevel } from './loaders.js';
 import { getTileSprites, getCharacterSprites } from './sprites.js';
 import { createBackgroundLayer, createCharacterLayer } from './layers.js';
 import Compositor from './compositor.js';
+import { createMario } from './enitities.js';
 
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
@@ -16,10 +17,12 @@ const [tiles, level, characters] = await Promise.all([
 const tileSprites = getTileSprites(tiles);
 const characterSprites = getCharacterSprites(characters);
 
-const position = { x: 64, y: 64 };
+const mario = createMario(characterSprites);
+
+const gravity = 0.5;
 
 const backgroundLayer = createBackgroundLayer(level.backgrounds, tileSprites);
-const characterLayer = createCharacterLayer(characterSprites, position);
+const characterLayer = createCharacterLayer(mario);
 
 compositor.addLayer(backgroundLayer);
 compositor.addLayer(characterLayer);
@@ -28,9 +31,8 @@ function update() {
 	requestAnimationFrame(update);
 
 	compositor.draw(context);
-
-	position.x += 2;
-	position.y += 2;
+	mario.update();
+	mario.velocity.y += gravity;
 }
 
 update();
