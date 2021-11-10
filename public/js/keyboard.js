@@ -32,7 +32,6 @@ export default class Keyboard {
 	}
 
 	listenTo(window) {
-		console.log({ window });
 		['keydown', 'keyup'].forEach((eventType) => {
 			window.addEventListener(eventType, (event) => {
 				this.handleEvent(event);

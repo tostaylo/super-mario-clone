@@ -26,14 +26,14 @@ input.addMapping(KEY_MAP.SPACE, function (keyState) {
 
 	switch (keyState) {
 		case PRESSED:
-			// mario.jump.start();
+			mario.jump.start();
 			break;
 		case RELEASED:
-			// mario.jump.cancel();
+			mario.jump.cancel();
 			break;
 
 		default:
-		// mario.jump.cancel();
+			mario.jump.cancel();
 	}
 });
 
@@ -52,7 +52,7 @@ function update() {
 
 	compositor.draw(context);
 	mario.update();
-	mario.velocity.y += gravity;
+	mario.vel.y += gravity;
 }
 
 update();

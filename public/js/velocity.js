@@ -6,7 +6,7 @@ export default class Velocity extends Trait {
 	}
 
 	update(entity) {
-		entity.position.x += entity.velocity.x;
-		entity.position.y += entity.velocity.y;
+		entity.position.x += entity.vel.x;
+		entity.position.y += entity.vel.y;
 	}
 }
