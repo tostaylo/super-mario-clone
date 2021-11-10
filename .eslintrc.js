@@ -13,7 +13,7 @@ module.exports = {
 	},
 	rules: {
 		'prettier/prettier': ['error'],
-		indent: ['error', 'tab'],
+		indent: ['error', 'tab', { SwitchCase: 1 }],
 		'prettier/prettier': [2, { useTabs: true }],
 		'no-undef': ['error', { typeof: true }],
 		quotes: [2, 'single', { avoidEscape: true, allowTemplateLiterals: true }],
