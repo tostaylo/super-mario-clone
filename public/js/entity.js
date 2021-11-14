@@ -2,7 +2,6 @@ import { Vector } from './math.js';
 
 export class Trait {
 	constructor(name) {
-		console.log(name);
 		this.name = name;
 	}
 
@@ -20,8 +19,6 @@ export default class Entity {
 	addTrait(trait) {
 		this.traits.push(trait);
 		this[trait.name] = trait;
-		console.log(trait);
-		console.log(this);
 	}
 
 	draw() {}

@@ -14,6 +14,6 @@ export function createBackgroundLayer(backgrounds, sprites) {
 	};
 }
 
-export function createCharacterLayer(entity) {
+export function createEntityLayer(entity) {
 	return (context) => entity.draw(context);
 }
