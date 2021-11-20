@@ -19,7 +19,6 @@ const tileSprites = getTileSprites(tiles);
 const characterSprites = getCharacterSprites(characters);
 
 const mario = createMario(characterSprites);
-const background = { background: levelJson.backgrounds, sprites: tileSprites };
 
 const input = new Keyboard();
 input.addMapping(KEY_MAP.SPACE, function (keyState) {
@@ -50,8 +49,13 @@ function updateMario() {
 
 const level = new Level(context);
 
-level.addTiles(levelJson.backgrounds);
+const background = { background: levelJson.backgrounds };
+const sprites = { sprite: tileSprites };
+
+level.addSprites([sprites]);
 level.addBackgrounds([background]);
 level.addEntities([mario]);
+level.addTiles();
 level.addLayers();
+level.addToCompositor();
 level.update(updateMario);

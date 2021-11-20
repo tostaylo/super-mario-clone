@@ -6,6 +6,7 @@ export default class Level {
 		this.compositor = new Compositor();
 		this.entities = new Set();
 		this.backgrounds = new Set();
+		this.sprites = new Set();
 		this.layers = [];
 		this.context = context;
 		this.update = this.update.bind(this);
@@ -19,33 +20,44 @@ export default class Level {
 		updater();
 	}
 
-	addLayers() {
+	addToCompositor() {
 		this.layers.forEach((layer) => this.compositor.addLayer(layer));
 	}
 
 	addEntities(entities) {
 		entities.forEach((entity) => {
 			this.entities.add(entity);
-			this.layers.push(createEntityLayer(entity));
 		});
 	}
 
 	addBackgrounds(backgrounds) {
-		backgrounds.forEach(({ background, sprites }) => {
+		backgrounds.forEach(({ background }) => {
 			this.backgrounds.add(background);
-			this.layers.push(createBackgroundLayer(this, sprites));
 		});
 	}
 
-	addTiles(backgrounds) {
-		backgrounds.forEach((background) => {
-			background.ranges.forEach(([x1, x2, y1, y2]) => {
-				for (let x = x1; x < x2; x++) {
-					for (let y = y1; y < y2; y++) {
-						this.tiles.set(x, y, { name: background.tile });
+	addSprites(sprites) {
+		sprites.forEach(({ sprite }) => {
+			this.sprites.add(sprite);
+		});
+	}
+
+	addTiles() {
+		this.backgrounds.forEach((backgrounds) => {
+			backgrounds.forEach(({ ranges, tile }) => {
+				ranges.forEach(([x1, x2, y1, y2]) => {
+					for (let x = x1; x < x2; x++) {
+						for (let y = y1; y < y2; y++) {
+							this.tiles.set(x, y, { name: tile });
+						}
 					}
-				}
+				});
 			});
 		});
+	}
+
+	addLayers() {
+		this.layers.push(createBackgroundLayer(this));
+		this.layers.push(createEntityLayer(this.entities.values().next().value));
 	}
 }
