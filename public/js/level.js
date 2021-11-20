@@ -1,6 +1,6 @@
 import Compositor from './compositor.js';
 import { createEntityLayer, createBackgroundLayer } from './layers.js';
-
+import { Matrix } from './math.js';
 export default class Level {
 	constructor(context) {
 		this.compositor = new Compositor();
@@ -9,6 +9,7 @@ export default class Level {
 		this.layers = [];
 		this.context = context;
 		this.update = this.update.bind(this);
+		this.tiles = new Matrix();
 	}
 
 	update(updater) {
@@ -32,7 +33,19 @@ export default class Level {
 	addBackgrounds(backgrounds) {
 		backgrounds.forEach(({ background, sprites }) => {
 			this.backgrounds.add(background);
-			this.layers.push(createBackgroundLayer(background, sprites));
+			this.layers.push(createBackgroundLayer(this, sprites));
+		});
+	}
+
+	addTiles(backgrounds) {
+		backgrounds.forEach((background) => {
+			background.ranges.forEach(([x1, x2, y1, y2]) => {
+				for (let x = x1; x < x2; x++) {
+					for (let y = y1; y < y2; y++) {
+						this.tiles.set(x, y, { name: background.tile });
+					}
+				}
+			});
 		});
 	}
 }

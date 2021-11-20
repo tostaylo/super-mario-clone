@@ -1,12 +1,12 @@
-import { drawBackground } from './draw.js';
-
-export function createBackgroundLayer(backgrounds, sprites) {
+export function createBackgroundLayer(level, sprites) {
 	const backgroundBuffer = document.createElement('canvas');
 	backgroundBuffer.width = 656;
 	backgroundBuffer.height = 240;
 
-	backgrounds.forEach((background) => {
-		drawBackground(background, backgroundBuffer.getContext('2d'), sprites);
+	const context = backgroundBuffer.getContext('2d');
+
+	level.tiles.forEach((tile, x, y) => {
+		sprites.drawTile(tile.name, context, x, y);
 	});
 
 	return (context) => {

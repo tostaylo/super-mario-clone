@@ -50,6 +50,7 @@ function updateMario() {
 
 const level = new Level(context);
 
+level.addTiles(levelJson.backgrounds);
 level.addBackgrounds([background]);
 level.addEntities([mario]);
 level.addLayers();
