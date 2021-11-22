@@ -19,6 +19,7 @@ const tileSprites = getTileSprites(tiles);
 const characterSprites = getCharacterSprites(characters);
 
 const mario = createMario(characterSprites);
+entityDebugger(mario);
 
 const input = new Keyboard();
 input.addMapping(KEY_MAP.SPACE, function (keyState) {
@@ -59,3 +60,14 @@ level.addTiles();
 level.addLayers();
 level.addToCompositor();
 level.update(updateMario);
+
+function entityDebugger(entity) {
+	['mousedown', 'mousemove'].forEach((eventName) => {
+		canvas.addEventListener(eventName, (event) => {
+			if (event.buttons === 1) {
+				entity.vel.set(0, 0);
+				entity.position.set(event.offsetX, event.offsetY);
+			}
+		});
+	});
+}

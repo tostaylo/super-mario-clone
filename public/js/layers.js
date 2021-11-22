@@ -19,3 +19,26 @@ export function createBackgroundLayer(level) {
 export function createEntityLayer(entity) {
 	return (context) => entity.draw(context);
 }
+
+export function createCollisionLayer(level) {
+	let resolvedTiles = [];
+	const tileResolver = level.tileCollider.tiles;
+	const tileSize = tileResolver.tileSize;
+	const getByIndexOriginal = tileResolver.getByIndex;
+
+	tileResolver.getByIndex = function getByIndexFake(x, y) {
+		resolvedTiles.push({ x, y });
+		return getByIndexOriginal.call(tileResolver, x, y);
+	};
+
+	return (context) => {
+		console.log({ context });
+		context.strokeStyle = 'blue';
+		resolvedTiles.forEach(({ x, y }) => {
+			context.beginPath();
+			context.rect(x * tileSize, y * tileSize, tileSize, tileSize);
+			context.stroke();
+		});
+		resolvedTiles = [];
+	};
+}

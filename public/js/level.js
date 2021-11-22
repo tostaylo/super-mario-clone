@@ -1,6 +1,11 @@
 import Compositor from './compositor.js';
-import { createEntityLayer, createBackgroundLayer } from './layers.js';
+import {
+	createEntityLayer,
+	createBackgroundLayer,
+	createCollisionLayer,
+} from './layers.js';
 import { Matrix } from './math.js';
+import TileCollider from './tiles.js';
 export default class Level {
 	constructor(context) {
 		this.compositor = new Compositor();
@@ -11,12 +16,19 @@ export default class Level {
 		this.context = context;
 		this.update = this.update.bind(this);
 		this.tiles = new Matrix();
+		this.tileCollider = new TileCollider(this.tiles);
 	}
 
 	update(updater) {
 		requestAnimationFrame(() => this.update(updater));
+
 		this.compositor.draw(this.context);
-		this.entities.forEach((entity) => entity.update());
+		this.entities.forEach((entity) => {
+			entity.update();
+			//TODO - Remove Test
+			this.tileCollider.test(entity);
+		});
+
 		updater();
 	}
 
@@ -58,6 +70,8 @@ export default class Level {
 
 	addLayers() {
 		this.layers.push(createBackgroundLayer(this));
+		//TODO - Refactor to handle all entities
 		this.layers.push(createEntityLayer(this.entities.values().next().value));
+		this.layers.push(createCollisionLayer(this));
 	}
 }
