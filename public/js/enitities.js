@@ -5,6 +5,7 @@ import Jump from './jump.js';
 export function createMario(characterSprites) {
 	const mario = new Entity();
 
+	mario.size.set(14, 16);
 	mario.position.set(64, 180);
 
 	mario.addTrait(new Jump());

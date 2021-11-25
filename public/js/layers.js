@@ -31,12 +31,24 @@ export function createCollisionLayer(level) {
 		return getByIndexOriginal.call(tileResolver, x, y);
 	};
 
+	// Drawing the collision box for debugging
 	return (context) => {
-		console.log({ context });
 		context.strokeStyle = 'blue';
 		resolvedTiles.forEach(({ x, y }) => {
 			context.beginPath();
 			context.rect(x * tileSize, y * tileSize, tileSize, tileSize);
+			context.stroke();
+		});
+
+		context.strokeStyle = 'yellow';
+		level.entities.forEach((entity) => {
+			context.beginPath();
+			context.rect(
+				entity.position.x,
+				entity.position.y,
+				entity.size.x,
+				entity.size.y
+			);
 			context.stroke();
 		});
 		resolvedTiles = [];

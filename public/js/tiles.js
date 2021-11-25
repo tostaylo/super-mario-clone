@@ -5,36 +5,39 @@ export default class TileCollider {
 
 	test(entity) {
 		this.checkY(entity);
-		const match = this.tiles.matchByPosition(
+		const match = this.tiles.searchByPosition(
 			entity.position.x,
 			entity.position.y
 		);
 		if (match) console.log(match);
 	}
+
 	checkY(entity) {
-		const match = this.tiles.matchByPosition(
+		const matches = this.tiles.searchByRange(
 			entity.position.x,
-			entity.position.y
+			entity.position.x + entity.size.x,
+			entity.position.y,
+			entity.position.y + entity.size.y
 		);
 
-		if (!match) return;
+		matches.forEach((match) => {
+			if (match.tile.name !== 'ground') return;
 
-		if (match.tile.name !== 'ground') return;
-
-		// Checks if for ground collision
-		if (entity.vel.y > 0) {
-			if (entity.position.y > match.y1) {
-				entity.position.y = match.y1;
-				entity.vel.y = 0;
+			// Checks for ground collision
+			if (entity.vel.y > 0) {
+				if (entity.position.y + entity.size.y > match.y1) {
+					entity.position.y = match.y1 - entity.size.y;
+					entity.vel.y = 0;
+				}
 			}
-		}
-		// Checks for ceiling collision
-		else if (entity.vel.y < 0) {
-			if (entity.position.y < match.y2) {
-				entity.position.y = match.y2;
-				entity.vel.y = 0;
+			// Checks for ceiling collision
+			else if (entity.vel.y < 0) {
+				if (entity.position.y < match.y2) {
+					entity.position.y = match.y2;
+					entity.vel.y = 0;
+				}
 			}
-		}
+		});
 	}
 }
 
@@ -48,6 +51,21 @@ export class TileResolver {
 		return Math.floor(pos / this.tileSize);
 	}
 
+	// returns range of tiles between two positions
+	// useful in detecting collisions
+	toIndexRange(pos1, pos2) {
+		const pMax = Math.ceil(pos2 / this.tileSize) * this.tileSize;
+		const range = [];
+		let pos = pos1;
+
+		do {
+			range.push(this.toIndex(pos));
+			pos += this.tileSize;
+		} while (pos < pMax);
+
+		return range;
+	}
+
 	getByIndex(indexX, indexY) {
 		const tile = this.matrix.get(indexX, indexY);
 
@@ -59,7 +77,18 @@ export class TileResolver {
 		}
 	}
 
-	matchByPosition(posX, posY) {
+	searchByPosition(posX, posY) {
 		return this.getByIndex(this.toIndex(posX), this.toIndex(posY));
+	}
+
+	searchByRange(x1, x2, y1, y2) {
+		const matches = [];
+		this.toIndexRange(x1, x2).forEach((indexX) =>
+			this.toIndexRange(y1, y2).forEach((indexY) => {
+				const match = this.getByIndex(indexX, indexY);
+				matches.push(match);
+			})
+		);
+		return matches;
 	}
 }
