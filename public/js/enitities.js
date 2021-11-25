@@ -7,8 +7,8 @@ export function createMario(characterSprites) {
 
 	mario.position.set(64, 180);
 
-	mario.addTrait(new Velocity());
 	mario.addTrait(new Jump());
+	mario.addTrait(new Velocity());
 
 	mario.draw = function (context) {
 		characterSprites.draw(

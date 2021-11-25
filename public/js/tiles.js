@@ -21,9 +21,17 @@ export default class TileCollider {
 
 		if (match.tile.name !== 'ground') return;
 
+		// Checks if for ground collision
 		if (entity.vel.y > 0) {
 			if (entity.position.y > match.y1) {
 				entity.position.y = match.y1;
+				entity.vel.y = 0;
+			}
+		}
+		// Checks for ceiling collision
+		else if (entity.vel.y < 0) {
+			if (entity.position.y < match.y2) {
+				entity.position.y = match.y2;
 				entity.vel.y = 0;
 			}
 		}
@@ -45,7 +53,9 @@ export class TileResolver {
 
 		if (tile) {
 			const y1 = indexY * this.tileSize;
-			return { tile, y1 };
+			const y2 = y1 + this.tileSize;
+
+			return { tile, y1, y2 };
 		}
 	}
 
