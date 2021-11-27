@@ -1,5 +1,5 @@
 export const KEY_STATES = { PRESSED: 1, RELEASED: 0 };
-export const KEY_MAP = { SPACE: 32 };
+export const KEY_MAP = { SPACE: 32, RIGHT: 39, LEFT: 37 };
 
 export default class Keyboard {
 	constructor() {

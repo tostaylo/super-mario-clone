@@ -38,6 +38,14 @@ input.addMapping(KEY_MAP.SPACE, function (keyState) {
 	}
 });
 
+input.addMapping(KEY_MAP.RIGHT, function (keyState) {
+	mario.go.direction = keyState;
+});
+
+input.addMapping(KEY_MAP.LEFT, function (keyState) {
+	mario.go.direction = -keyState;
+});
+
 input.listenTo(window);
 
 // TODO - How to get the Entity to know about the gravity and

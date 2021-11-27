@@ -9,7 +9,7 @@ export default class TileCollider {
 			entity.position.x,
 			entity.position.y
 		);
-		if (match) console.log(match);
+		// if (match) console.log(match);
 	}
 
 	checkY(entity) {
@@ -21,6 +21,8 @@ export default class TileCollider {
 		);
 
 		matches.forEach((match) => {
+			if (!match) return console.log('no match');
+
 			if (match.tile.name !== 'ground') return;
 
 			// Checks for ground collision
