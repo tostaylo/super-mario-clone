@@ -1,5 +1,9 @@
 export const KEY_STATES = { PRESSED: 1, RELEASED: 0 };
-export const KEY_MAP = { SPACE: 32, RIGHT: 39, LEFT: 37 };
+export const KEY_MAP = {
+	SPACE: 'Space',
+	RIGHT: 'ArrowRight',
+	LEFT: 'ArrowLeft',
+};
 
 export default class Keyboard {
 	constructor() {
@@ -7,28 +11,28 @@ export default class Keyboard {
 		this.keyCallbacks = new Map();
 	}
 
-	addMapping(keycode, callback) {
-		this.keyCallbacks.set(keycode, callback);
+	addMapping(code, callback) {
+		this.keyCallbacks.set(code, callback);
 	}
 
 	handleEvent(event) {
-		const { keyCode } = event;
+		const { code } = event;
 		const { PRESSED, RELEASED } = KEY_STATES;
 
-		if (!this.keyCallbacks.has(keyCode)) {
+		if (!this.keyCallbacks.has(code)) {
 			return;
 		}
 		event.preventDefault();
 
 		const keyState = event.type === 'keydown' ? PRESSED : RELEASED;
 
-		if (this.keyStates.get(keyCode) === keyState) {
+		if (this.keyStates.get(code) === keyState) {
 			return;
 		}
 
-		this.keyStates.set(keyCode, keyState);
+		this.keyStates.set(code, keyState);
 
-		this.keyCallbacks.get(keyCode)(keyState);
+		this.keyCallbacks.get(code)(keyState);
 	}
 
 	listenTo(window) {

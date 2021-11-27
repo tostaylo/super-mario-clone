@@ -1,8 +1,8 @@
 import { loadImage, loadLevel } from './loaders.js';
 import { getTileSprites, getCharacterSprites } from './sprites.js';
 import { createMario } from './enitities.js';
-import Keyboard, { KEY_STATES, KEY_MAP } from './keyboard.js';
 import Level from './level.js';
+import { setupKeyboard } from './input.js';
 
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
@@ -20,33 +20,7 @@ const characterSprites = getCharacterSprites(characters);
 
 const mario = createMario(characterSprites);
 entityDebugger(mario);
-
-const input = new Keyboard();
-input.addMapping(KEY_MAP.SPACE, function (keyState) {
-	const { PRESSED, RELEASED } = KEY_STATES;
-
-	switch (keyState) {
-		case PRESSED:
-			mario.jump.start();
-			break;
-		case RELEASED:
-			mario.jump.cancel();
-			break;
-
-		default:
-			mario.jump.cancel();
-	}
-});
-
-input.addMapping(KEY_MAP.RIGHT, function (keyState) {
-	mario.go.direction = keyState;
-});
-
-input.addMapping(KEY_MAP.LEFT, function (keyState) {
-	mario.go.direction = -keyState;
-});
-
-input.listenTo(window);
+setupKeyboard(mario).listenTo(window);
 
 // TODO - How to get the Entity to know about the gravity and
 // put updateMario within mario.update so we don't need to pass it into
