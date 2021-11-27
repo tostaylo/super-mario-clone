@@ -22,14 +22,6 @@ const mario = createMario(characterSprites);
 entityDebugger(mario);
 setupKeyboard(mario).listenTo(window);
 
-// TODO - How to get the Entity to know about the gravity and
-// put updateMario within mario.update so we don't need to pass it into
-// level.update()
-const gravity = 0.5;
-function updateMario() {
-	mario.vel.y += gravity;
-}
-
 const level = new Level(context);
 
 const background = { background: levelJson.backgrounds };
@@ -41,7 +33,7 @@ level.addEntities([mario]);
 level.addTiles();
 level.addLayers();
 level.addToCompositor();
-level.update(updateMario);
+level.update();
 
 function entityDebugger(entity) {
 	['mousedown', 'mousemove'].forEach((eventName) => {

@@ -17,10 +17,11 @@ export default class Level {
 		this.update = this.update.bind(this);
 		this.tiles = new Matrix();
 		this.tileCollider = new TileCollider(this.tiles);
+		this.gravity = 0.5;
 	}
 
-	update(updater) {
-		requestAnimationFrame(() => this.update(updater));
+	update() {
+		requestAnimationFrame(() => this.update());
 
 		this.compositor.draw(this.context);
 		this.entities.forEach((entity) => {
@@ -31,9 +32,9 @@ export default class Level {
 
 			entity.position.y += entity.vel.y;
 			this.tileCollider.checkY(entity);
-		});
 
-		updater();
+			entity.vel.y += this.gravity;
+		});
 	}
 
 	addToCompositor() {
