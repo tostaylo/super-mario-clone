@@ -25,8 +25,12 @@ export default class Level {
 		this.compositor.draw(this.context);
 		this.entities.forEach((entity) => {
 			entity.update();
-			//TODO - Remove Test
-			this.tileCollider.test(entity);
+
+			entity.position.x += entity.vel.x;
+			this.tileCollider.checkX(entity);
+
+			entity.position.y += entity.vel.y;
+			this.tileCollider.checkY(entity);
 		});
 
 		updater();

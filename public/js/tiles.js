@@ -3,15 +3,7 @@ export default class TileCollider {
 		this.tiles = new TileResolver(tileMatrix);
 	}
 
-	test(entity) {
-		this.checkY(entity);
-		const match = this.tiles.searchByPosition(
-			entity.position.x,
-			entity.position.y
-		);
-		// if (match) console.log(match);
-	}
-
+	// TODO: OPTIMIZATION: EPISODE 5 1:16:00
 	checkY(entity) {
 		const matches = this.tiles.searchByRange(
 			entity.position.x,
@@ -25,6 +17,8 @@ export default class TileCollider {
 
 			if (match.tile.name !== 'ground') return;
 
+			if (entity.vel.y === 0) return;
+
 			// Checks for ground collision
 			if (entity.vel.y > 0) {
 				if (entity.position.y + entity.size.y > match.y1) {
@@ -37,6 +31,39 @@ export default class TileCollider {
 				if (entity.position.y < match.y2) {
 					entity.position.y = match.y2;
 					entity.vel.y = 0;
+				}
+			}
+		});
+	}
+
+	// TODO: OPTIMIZATION: EPISODE 5 1:16:00
+	checkX(entity) {
+		const matches = this.tiles.searchByRange(
+			entity.position.x,
+			entity.position.x + entity.size.x,
+			entity.position.y,
+			entity.position.y + entity.size.y
+		);
+
+		matches.forEach((match) => {
+			if (!match) return console.log('no match');
+
+			if (match.tile.name !== 'ground') return;
+
+			if (entity.vel.x === 0) return;
+
+			// Checks for right collision I think
+			if (entity.vel.x > 0) {
+				if (entity.position.x + entity.size.x > match.x1) {
+					entity.position.x = match.x1 - entity.size.x;
+					entity.vel.x = 0;
+				}
+			}
+			// Checks for left collision I think
+			else if (entity.vel.x < 0) {
+				if (entity.position.x < match.x2) {
+					entity.position.x = match.x2;
+					entity.vel.x = 0;
 				}
 			}
 		});
@@ -74,8 +101,10 @@ export class TileResolver {
 		if (tile) {
 			const y1 = indexY * this.tileSize;
 			const y2 = y1 + this.tileSize;
+			const x1 = indexX * this.tileSize;
+			const x2 = x1 + this.tileSize;
 
-			return { tile, y1, y2 };
+			return { tile, y1, y2, x1, x2 };
 		}
 	}
 

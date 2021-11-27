@@ -11,7 +11,7 @@ export function createMario(characterSprites) {
 
 	mario.addTrait(new Go());
 	mario.addTrait(new Jump());
-	mario.addTrait(new Velocity());
+	// mario.addTrait(new Velocity());
 
 	mario.draw = function (context) {
 		characterSprites.draw(
