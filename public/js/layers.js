@@ -11,13 +11,29 @@ export function createBackgroundLayer(level) {
 		);
 	});
 
-	return (context) => {
-		context.drawImage(backgroundBuffer, 0, 0);
+	return function drawBackgroundLayer(context, camera) {
+		context.drawImage(backgroundBuffer, -camera.position.x, -camera.position.y);
 	};
 }
 
-export function createEntityLayer(entity) {
-	return (context) => entity.draw(context);
+export function createEntityLayer(entity, width = 64, height = 64) {
+	const entityBuffer = document.createElement('canvas');
+	entityBuffer.width = width;
+	entityBuffer.height = height;
+
+	const entityBufferContext = entityBuffer.getContext('2d');
+
+	return function drawEntityLayer(context, camera) {
+		entityBufferContext.clearRect(0, 0, width, height);
+
+		entity.draw(entityBufferContext);
+
+		context.drawImage(
+			entityBuffer,
+			entity.position.x - camera.position.x,
+			entity.position.y - camera.position.y
+		);
+	};
 }
 
 export function createCollisionLayer(level) {
@@ -31,24 +47,32 @@ export function createCollisionLayer(level) {
 		return getByIndexOriginal.call(tileResolver, x, y);
 	};
 
-	// Drawing the collision box for debugging
-	return (context) => {
+	return function drawCollisionLayer(context, camera) {
+		// Drawing the collision box for debugging
 		context.strokeStyle = 'blue';
 		resolvedTiles.forEach(({ x, y }) => {
 			context.beginPath();
-			context.rect(x * tileSize, y * tileSize, tileSize, tileSize);
+			context.rect(
+				x * tileSize - camera.position.x,
+				y * tileSize - camera.position.y,
+				tileSize,
+				tileSize
+			);
+			// Drawing the collision box for debugging
 			context.stroke();
 		});
 
+		// Drawing the collision box for debugging
 		context.strokeStyle = 'yellow';
 		level.entities.forEach((entity) => {
 			context.beginPath();
 			context.rect(
-				entity.position.x,
-				entity.position.y,
+				entity.position.x - camera.position.x,
+				entity.position.y - camera.position.y,
 				entity.size.x,
 				entity.size.y
 			);
+			// Drawing the collision box for debugging
 			context.stroke();
 		});
 		resolvedTiles = [];

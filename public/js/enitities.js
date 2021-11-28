@@ -1,5 +1,5 @@
 import Entity from './entity.js';
-import Velocity from './velocity.js';
+// import Velocity from './velocity.js';
 import Jump from './jump.js';
 import Go from './go.js';
 
@@ -14,12 +14,7 @@ export function createMario(characterSprites) {
 	// mario.addTrait(new Velocity());
 
 	mario.draw = function (context) {
-		characterSprites.draw(
-			'mario-idle',
-			context,
-			this.position.x,
-			this.position.y
-		);
+		characterSprites.draw('mario-idle', context, 0, 0);
 	};
 
 	return mario;

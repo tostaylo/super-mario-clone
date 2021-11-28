@@ -20,10 +20,11 @@ export default class Level {
 		this.gravity = 0.5;
 	}
 
-	update() {
-		requestAnimationFrame(() => this.update());
+	update(camera) {
+		requestAnimationFrame(() => this.update(camera));
 
-		this.compositor.draw(this.context);
+		this.compositor.draw(this.context, camera);
+
 		this.entities.forEach((entity) => {
 			entity.update();
 
